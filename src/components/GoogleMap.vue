@@ -17,17 +17,16 @@ export default {
     };
   },
   created() {
-    const data = JSON.parse(localStorage.getItem("vuex"));
-    if (data?.weather.weatherInformation) {
-      this.center = {
-        lat: data?.weather.weatherInformation.lat,
-        lng: data?.weather.weatherInformation.lon,
-      };
-    }
+    this.center = {
+      lat: this.getWeatherInformation.lat,
+      lng: this.getWeatherInformation.lon,
+    };
   },
+  
   computed: {
     ...mapGetters("weather", ["getWeatherInformation"]),
   },
+  
   watch: {
     getWeatherInformation(newVal) {
       this.center = {

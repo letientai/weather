@@ -1,11 +1,14 @@
-// import languageAction from "./languageAction";
-// import languageMutations from "./languageMutations";
-import i18n from "@/language/i18n";
 export default {
   namespaced: true,
+  state: () => ({
+    lang: process.env.VUE_APP_LANG_DEFAULT,
+  }),
+  getters: {
+    getLanguage: (state) => state.lang,
+  },
   mutations: {
     setLanguage(state, payload) {
-      i18n.locale = payload;
+      state.lang = payload;
     },
   },
   actions: {

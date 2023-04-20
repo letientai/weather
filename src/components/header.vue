@@ -5,7 +5,7 @@
         <div class="col-lg-6 col-12">
           <h1>OpenWeather</h1>
           <h2>
-            Weather forecasts, nowcasts and history in a fast and elegant way
+            {{ $t("common.title") }}
           </h2>
         </div>
       </div>
@@ -18,7 +18,7 @@ export default {
   methods: {},
 };
 </script>
-<style>
+<style >
 .wrapper {
   background-image: url("../assets/spring1.jpg");
   width: 100%;

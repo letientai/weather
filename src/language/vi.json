@@ -1,0 +1,25 @@
+{
+  "common": {
+    "title": "Dự báo thời tiết, tin tức thời sự và lịch sử một cách nhanh chóng và thanh lịch"
+  },
+  "humidity": "Độ ẩm",
+  "dewPoint": "Điểm sương",
+  "visibility": "Hiển thị",
+  "feelsLike": "Cảm thấy như",
+  "UV": "Tia cực tím",
+  "titleChart": "Dự báo hàng giờ",
+  "titleDaily": "Dự báo 8 ngày",
+  "placeholderSearch": "Tìm kiếm thành phố",
+  "btnSearch": "Tìm kiếm",
+  "errorSearch": "Không tìm thấy. Để tìm kiếm chính xác hơn, hãy đặt tên thành phố, mã quốc gia gồm 2 chữ cái (ISO3166)",
+  "maxTemp": "Nhiệt độ cao nhất sẽ là ",
+  "minTemp": "nhiệt độ thấp nhất sẽ là",
+  "morning": "SÁNG",
+  "afternoon": "CHIỀU",
+  "evening": "TỐI",
+  "night": "ĐÊM",
+  "temperature": "NHIỆT ĐỘ",
+  "feelLike": "CẢM THẤY",
+  "sunrise": "BÌNH MINH",
+  "sunset": "HOÀNG HÔN"
+}

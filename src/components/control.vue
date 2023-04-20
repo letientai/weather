@@ -8,7 +8,7 @@
               type="text"
               class="input-search"
               v-model="dataSearch"
-              placeholder="Search city"
+              :placeholder="$t('placeholderSearch')"
               @keyup.enter="handleSearch"
             />
             <div
@@ -21,19 +21,24 @@
                 v-show="listSuggest.length == 0 || v$.dataSearch.$error"
                 style="font-size: 11px; padding: 10px 5px 0"
               >
-                Not found. To make search more precise put the city's name,
-                comma, 2-letter country code (ISO3166).
+                {{ $t("errorSearch") }}
               </div>
               <suggest-vue v-bind:listSuggest="listSuggest"></suggest-vue>
             </div>
           </div>
-          <button class="btn-search" v-on:click="handleSearch">Search</button>
+          <button class="btn-search" v-on:click="handleSearch">
+            {{ $t("btnSearch") }}
+          </button>
         </div>
         <div class="controls my-4 d-flex">
           <div class="language">
-            <select v-model="selected" class="selected-language">
-              <option value="vn">Tiếng việt</option>
+            <select
+              v-model="selected"
+              class="selected-language"
+              @change="changeLang"
+            >
               <option value="en">English</option>
+              <option value="vi">Tiếng việt</option>
             </select>
           </div>
           <div class="owm-switch d-flex">
@@ -47,10 +52,10 @@
 </template>
 
 <script>
-import api from "../service/weatherAPI";
 import suggestVue from "./suggest.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength } from "@vuelidate/validators";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "control-vue",
@@ -58,40 +63,53 @@ export default {
     suggestVue,
   },
   setup: () => ({ v$: useVuelidate() }),
+
   data() {
     return {
-      selected: "vn",
+      selected: "",
       submit: false,
       listSuggest: [],
       dataSearch: "",
     };
   },
-
+  computed: {
+    ...mapGetters("language", ["getLanguage"]),
+    ...mapGetters("weather", ["getListCountry"]),
+  },
   validations() {
     return {
       dataSearch: { required, minLength: minLength(3) }, // Matches this.firstName
     };
   },
+
+  created() {
+    this.selected = this.getLanguage;
+  },
+
   mounted() {
     document.removeEventListener("click", this.handleClickOutside, true);
   },
 
+  watch: {
+    getListCountry(newVal) {
+      this.listSuggest = newVal;
+      console.log(newVal);
+    },
+  },
   methods: {
+    ...mapActions("language", ["setLanguage"]),
+    ...mapActions("weather", ["findCountry"]),
+
     async handleSearch() {
       this.v$.$validate();
-      console.log(this.v$.dataSearch.$error);
       if (!this.v$.dataSearch.$error) {
-        try {
-          const res = await api.findCountries(this.dataSearch);
-          this.listSuggest = res.data.list;
-          this.submit = true;
-        } catch (error) {
-          console.log(error);
-        }
+        await this.findCountry(this.dataSearch);
       } else {
         this.listSuggest = [];
-        this.submit = true;
       }
+
+
+      this.submit = true;
       if (this.submit) {
         document.addEventListener("click", this.handleClickOutside, true);
       } else {
@@ -106,8 +124,14 @@ export default {
         document.removeEventListener("click", this.handleClickOutside, true);
       }
     },
+    
     closeSuggest() {
       this.submit = false;
+    },
+
+    changeLang() {
+      this.$i18n.locale = this.selected;
+      this.setLanguage(this.selected);
     },
   },
 };
@@ -128,6 +152,8 @@ export default {
   background: #424242;
   color: white;
   padding: 5px 15px;
+  font-size: 14px;
+  width: 90px;
 }
 .controls {
   width: 37%;

@@ -27,8 +27,10 @@
     </li>
   </ul>
 </template>
+
 <script>
-import weatherAPI from "@/service/weatherAPI";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "suggest-vue",
   props: {
@@ -39,18 +41,29 @@ export default {
       list: this.listSuggest,
     };
   },
+
   methods: {
+    ...mapGetters("language", ["getLanguage"]),
+    ...mapActions("loader", ["setLoader"]),
+    ...mapActions("weather", ["calloneWeather", "getCountry"]),
+
     async getWeather(item) {
-      
-      // localStorage.setItem("country", JSON.stringify(item));
-      const res = await weatherAPI.getWeather(item.coord.lat, item.coord.lon);
-      const country = await weatherAPI.getCountry(item.id);
-      this.$store.dispatch("weather/setCountry", country.data);
-      this.$store.dispatch("weather/setWeather", res.data);
+      this.calloneWeather(item.coord);
+      this.getCountry(item.id);
+    },
+  },
+
+  watch: {
+    getLanguage() {
+      this.getWeather();
+    },
+    listSuggest(newVal) {
+      console.log(newVal);
     },
   },
 };
 </script>
+
 <style scoped>
 .search-dropdown-menu {
   width: 100%;

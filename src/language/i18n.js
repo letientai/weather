@@ -1,17 +1,16 @@
 // import Vue from "vue";
 import { createI18n } from 'vue-i18n'
-import vnMessage from "./vn.json";
 import enMessage from "./en.json";
+import viMessage from "./vi.json"
 
 // Vue.use(VueI18n);
 
 const messages = {
   en: enMessage,
-  vn: vnMessage,
+  vi: viMessage,
 };
 const i18n = createI18n({
-  locale: "vn", // set locale
-  fallbackLocale: "vn", // set fallback locale
+  locale: process.env.VUE_APP_LANG_DEFAULT, // set locale
   messages, // set locale messages
 });
 

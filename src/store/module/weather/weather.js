@@ -7,7 +7,8 @@ export default {
   namespaced: true,
   state: () => ({
     weatherInformation: {},
-    country: {}
+    country: {},
+    listCountry: []
   }),
   getters: weatherGetters,
   mutations: weatherMutations,

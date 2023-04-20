@@ -6,7 +6,7 @@ import i18n from "./language/i18n";
 import store from "./store/Index";
 import router from "./router";
 import VueGoogleMaps from '@fawmi/vue-google-maps'
-
+import VueApexCharts from 'vue3-apexcharts'
 const app = createApp(App);
 
 app.use(VueGoogleMaps, {
@@ -18,5 +18,6 @@ app.use(VueGoogleMaps, {
 app.use(router);
 app.use(store);
 app.use(i18n);
+app.use(VueApexCharts);
 app.mount('#app');
 

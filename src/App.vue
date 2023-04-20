@@ -1,15 +1,27 @@
 <template>
   <div id="app">
-    <!-- <router-view></router-view> -->
+    <loader v-show="getLoader" />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import weather from "./views/weather.vue";
+import { mapGetters } from "vuex";
+import loader from "./components/ultil/loader.vue";
 export default {
-  // components: { weather },s
   name: "App",
+  components: {
+    loader,
+  },
+  data() {
+    return {
+      loading: false
+    };
+  },
+  computed: {
+    ...mapGetters("loader", ["getLoader"]),
+  },
+ 
 };
 </script>
 
@@ -22,5 +34,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #48484a;
+  position: relative;
 }
 </style>
