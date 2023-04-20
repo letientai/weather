@@ -1,5 +1,25 @@
 {
-    "common": {
-        "title" : "Hello"
-    }
+  "common": {
+    "title": "Weather forecasts, nowcasts and history in a fast and elegant way"
+  },
+  "humidity": "Humidity",
+  "dewPoint": "Dew point",
+  "visibility": "Visibility",
+  "feelsLike": "Feels like",
+  "UV": "UV",
+  "titleChart": "Hourly forecast",
+  "titleDaily": "8-day forecast",
+  "placeholderSearch": "Search city",
+  "btnSearch": "Search",
+  "errorSearch": "Not found. To make search more precise put the city's name, 2-letter country code (ISO3166).",
+  "maxTemp": "The high will be ",
+  "minTemp": "the low will be",
+  "morning": "Morning",
+  "afternoon": "Afternoon",
+  "evening": "Evening",
+  "night": "Night",
+  "temperature": "TEMPERATURE",
+  "feelLike": "FEELS LIKE",
+  "sunrise": "SUNRISE",
+  "sunset": "SUNSET"
 }

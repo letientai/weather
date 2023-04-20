@@ -16,15 +16,15 @@
       {{ Math.round(weatherInfo?.temp) }}°C
     </div>
     <div class="description">
-      Feels like {{ Math.round(weatherInfo?.feels_like) }}°C.
+      {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°C.
       {{ weatherInfo?.weather[0].description }}
     </div>
     <ul class="weather-items d-flex my-2">
       <li>{{ weatherInfo?.wind_speed.toFixed(1) }}m/s SE</li>
       <li>{{ weatherInfo?.pressure }}hPa</li>
-      <li>Humidity: {{ weatherInfo?.humidity }}%</li>
-      <li>Dew point: {{ Math.round(weatherInfo?.dew_point) }}°C</li>
-      <li>Visibility: {{ weatherInfo?.visibility / 1000 }}km</li>
+      <li>{{ $t("humidity") }}: {{ weatherInfo?.humidity }}%</li>
+      <li>{{ $t("dewPoint") }}: {{ Math.round(weatherInfo?.dew_point) }}°C</li>
+      <li>{{ $t("visibility") }}: {{ weatherInfo?.visibility / 1000 }}km</li>
     </ul>
   </div>
 </template>
@@ -39,31 +39,43 @@ export default {
       weatherInfo: {},
       country: {},
       date: "",
-      check: false
+      check: false,
     };
   },
 
   created() {
-    const data = JSON.parse(localStorage.getItem("vuex"));
-    if (data?.weather.weatherInformation) {
-      this.weatherInfo = data?.weather.weatherInformation.current;
-      this.country = data?.weather.country;
-      this.date = new Date(data?.weather.weatherInformation.current.dt * 1000);
-      this.check = true
-    }
+    this.fetchData();
+  },
+
+  methods: {
+    fetchData() {
+        this.weatherInfo = this.getWeatherInformation.current;
+        this.country = this.getCountryInformation;
+        this.date = this.getDate(this.getWeatherInformation.current.dt);
+        this.check = true;
+    },
+    getDate(value) {
+      const date = new Date(value * 1000);
+      const dayOfWeek = date.toLocaleString(this.getLanguage, { weekday: "short" });
+      const month = date.toLocaleString(this.getLanguage, { month: "short" });
+      const dayOfMonth = date.getDate();
+      const formattedDate = `${dayOfWeek} ${month} ${dayOfMonth}`;
+      return formattedDate;
+    },
   },
   computed: {
     ...mapGetters("weather", [
       "getWeatherInformation",
       "getCountryInformation",
     ]),
+    ...mapGetters("language", ["getLanguage"]),
   },
 
   watch: {
     getWeatherInformation(newVal) {
       this.weatherInfo = newVal.current;
       const timestamp = newVal.current.dt;
-      this.date = new Date(timestamp * 1000);
+      this.date = this.getDate(timestamp);
     },
     getCountryInformation(newVal) {
       this.country = newVal;

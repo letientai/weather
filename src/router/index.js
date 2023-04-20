@@ -1,19 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 import weather from "../views/weather.vue";
-
+import home from "../views/home.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      component: weather
+      path: "/",
+      component: home,
     },
     {
-      path: '/about',
-      component: weather
+      path: "/weather",
+      component: weather,
     },
     // ...
-  ]
+  ],
 });
 
-export default router
+export default router;

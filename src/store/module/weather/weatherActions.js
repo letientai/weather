@@ -1,8 +1,11 @@
 export default {
-    setWeather(context, payload) {
-    context.commit("setWeather", payload);
+  findCountry(context, payload) {
+    context.commit("findCountry", payload);
   },
-    setCountry(context, payload) {
-    context.commit("setCountry", payload);
+  calloneWeather(context, payload) {
+    context.commit("calloneWeather", payload);
+  },
+  getCountry(context, payload) {
+    context.commit("getCountry", payload);
   },
 };
