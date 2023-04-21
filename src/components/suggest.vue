@@ -7,7 +7,9 @@
       @click="getWeather(item)"
     >
       <!-- {{ item }} -->
-      <div class="name parameter">{{ item.name }}, {{ item.sys.country }}</div>
+      <div class="name parameter">
+        {{ item.name }}, {{ item?.sys?.country }}
+      </div>
       <div class="temp parameter">
         {{ Math.round(item.main.temp - 273) }} °C
       </div>
@@ -48,8 +50,16 @@ export default {
     ...mapActions("weather", ["calloneWeather", "getCountry"]),
 
     async getWeather(item) {
-      this.calloneWeather(item.coord);
-      this.getCountry(item.id);
+      try {
+        await this.setLoader(true);
+        await Promise.all([
+          this.calloneWeather(item.coord),
+          this.getCountry(item.id),
+        ]);
+        await this.$router.push("/weather");
+      } finally {
+        await this.setLoader(false);
+      }
     },
   },
 

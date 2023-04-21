@@ -7,10 +7,16 @@ const router = createRouter({
     {
       path: "/",
       component: home,
+      meta: {
+        layout: "default-layout",
+      },
     },
     {
       path: "/weather",
       component: weather,
+      meta: {
+        layout: "default-layout",
+      },
     },
     // ...
   ],

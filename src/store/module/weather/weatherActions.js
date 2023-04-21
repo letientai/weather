@@ -1,11 +1,31 @@
+import weatherAPI from "@/service/weatherAPI";
+
 export default {
-  findCountry(context, payload) {
-    context.commit("findCountry", payload);
+
+  async findCountry(context, payload) {
+    try {
+      const res = await weatherAPI.findCountries(payload);
+      context.commit("findCountry", res);
+    } catch (error) {
+      console.log(error);
+    }
   },
-  calloneWeather(context, payload) {
-    context.commit("calloneWeather", payload);
+
+  async calloneWeather(context, payload) {
+    try {
+      const res = await weatherAPI.getWeather(payload.lat, payload.lon);
+      context.commit("calloneWeather", res);
+    } catch (error) {
+      console.log(error);
+    }
   },
-  getCountry(context, payload) {
-    context.commit("getCountry", payload);
+
+  async getCountry(context, payload) {
+    try {
+      const res = await weatherAPI.getCountry(payload);
+      context.commit("getCountry", res);
+    } catch (error) {
+      console.log(error);
+    }
   },
 };

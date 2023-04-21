@@ -15,8 +15,8 @@
         <div class="description">
           <div class="weather">{{ daily?.weather[0]?.description }}.</div>
           <div>
-            {{ $t("maxTemp") }}{{ Math.round(daily?.temp?.max) }}°C,
-            {{ $t("minTemp") }} {{ Math.round(daily?.temp?.min) }}°C.
+            {{ $t("maxTemp") }}{{ Math.round(daily?.temp?.max) }}°{{ unit.temp }},
+            {{ $t("minTemp") }} {{ Math.round(daily?.temp?.min) }}°{{ unit.temp }}.
           </div>
         </div>
         <div class="close" @click="closeDetail">
@@ -25,11 +25,11 @@
       </div>
       <ul class="weather-items d-flex my-2">
         <li>{{ daily?.rain }}mm ({{ daily?.pop * 100 }}%)</li>
-        <li>{{ daily?.wind_speed.toFixed(1) }}m/s SSE</li>
+        <li>{{ daily?.wind_speed.toFixed(1) }}{{ unit.wind }} SSE</li>
         <li>{{ daily?.pressure }}hPa</li>
         <li>{{ $t("humidity") }}: {{ daily?.humidity }}%</li>
         <li>{{ $t("UV") }}:{{ Math.round(daily?.uvi) }}</li>
-        <li>{{ $t("dewPoint") }}: {{ Math.round(daily?.dew_point) }}°C</li>
+        <li>{{ $t("dewPoint") }}: {{ Math.round(daily?.dew_point) }}°{{ unit.temp }}</li>
       </ul>
 
       <div class="temp-detail my-3">
@@ -74,6 +74,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "forecast-detail",
   props: {
@@ -83,13 +84,38 @@ export default {
   data() {
     return {
       daily: this.dataDaily,
+      unit: {
+        temp: "",
+        wind: "",
+      },
     };
   },
-
+  computed: {
+    ...mapGetters("unit", ["getUnit"]),
+  },
   watch: {
     dataDaily(newVal) {
       this.daily = newVal;
     },
+    getUnit(newVal) {
+      if (newVal === "metric") {
+        this.unit.temp = "C";
+        this.unit.wind = "m/s";
+      } else {
+        this.unit.temp = "F";
+        this.unit.wind = "mph";
+      }
+    },
+  },
+
+  created() {
+    if (this.getUnit === "metric") {
+      this.unit.temp = "C";
+      this.unit.wind = "m/s";
+    } else {
+      this.unit.temp = "F";
+      this.unit.wind = "mph";
+    }
   },
 
   methods: {
@@ -113,11 +139,13 @@ export default {
 <style scoped>
 .content {
   width: 100%;
+  font-size: 14px;
+}
+.description {
   font-size: 16px !important;
 }
 .top-section {
   align-items: center;
-  /* background: chocolate; */
   justify-content: space-between;
 }
 .table {

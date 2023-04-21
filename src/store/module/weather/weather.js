@@ -11,6 +11,6 @@ export default {
     listCountry: []
   }),
   getters: weatherGetters,
-  mutations: weatherMutations,
+  mutations: weatherMutations, 
   actions: weatherActions,
 };

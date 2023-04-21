@@ -1,5 +1,5 @@
 <template lang="">
-  <div>
+  <div style="margin-top: -250px">
     <div class="header">
       <header-vue />
     </div>
@@ -7,17 +7,21 @@
       <control-vue />
     </div>
     <div class="section-content my-4">
-      <div class="grid-container d-flex justify-content-between">
-        <div class="col-4">
+      <div
+        class="grid-container d-block d-md-flex px-3 px-md-2 px-lg-2 px-xl-0 justify-content-between"
+      >
+        <div class="col-12 col-md-4">
           <info-weather />
         </div>
-        <div class="col-7 bg-dark"><google-map /></div>
+        <div class="col-12 col-md-7 bg-dark"><google-map /></div>
       </div>
-      <div class="grid-container d-flex justify-content-between mt-4">
-        <div class="chart col-6">
+      <div
+        class="grid-container d-block d-md-flex px-3 px-md-2 px-lg-2 px-xl-0 justify-content-between mt-4"
+      >
+        <div class="chart col-12 col-md-6">
           <lineChart v-bind:dataHourly="dataHourly" />
         </div>
-        <div class="forecast col ml-2">
+        <div class="forecast col-12 col-md ml-2">
           <forecastVue v-bind:listDataDaily="dataDaily" />
         </div>
       </div>
@@ -62,6 +66,7 @@ export default {
       "getCountryInformation",
     ]),
     ...mapGetters("language", ["getLanguage"]),
+    ...mapGetters("unit", ["getUnit"]),
   },
 
   created() {
@@ -73,41 +78,23 @@ export default {
     ...mapActions("loader", ["setLoader"]),
     ...mapActions("weather", ["getCountry"]),
 
-    fetchData() {
-      // this.setLoader(true);
+    async fetchData() {
       const data = JSON.parse(localStorage.getItem("vuex"));
-      // //gán địa chỉ mặc định khi chưa có data ở Localstorage
-      // let hourly = [];
-      // let lat = 48.8534;
-      // let lon = 2.3488;
-      // let id = 2988507;
-      // if (data?.weather.weatherInformation.hourly) {
-      //   hourly = data.weather.weatherInformation.hourly;
-      //   lat = data.weather.weatherInformation.lat;
-      //   lon = data.weather.weatherInformation.lon;
-      //   id = data.weather.country.id;
-      //   // Gán dữ liệu cho biểu đồ Chart
-      //   this.dataHourly.rain = hourly?.map((x) => {
-      //     if (x.rain) {
-      //       return x.rain["1h"];
-      //     } else {
-      //       return 0;
-      //     }
-      //   });
-      //   this.dataHourly.temp = hourly.map((x) => x.temp);
-      //   this.dataHourly.hour = hourly.map((x) =>
-      //     new Date(x.dt * 1000).getHours()
-      //   );
-      //   // Gán dữ liệu forecast
-      //   this.dataDaily = data.weather.weatherInformation.daily;
-      // }
-      // //gọi API với địa chỉ mặc đỉnh hoặc địa chỉ trong Localstorage nếu có
-      this.$i18n.locale = data.language.lang
-      this.setLoader(true);
-      const weather = this.getWeatherInformation;
-      this.calloneWeather(weather);
-      this.getCountry(this.getCountryInformation.id);
-      this.setLoader(false);
+      if (data) {
+        this.$i18n.locale = data.language.lang;
+        const weather = this.getWeatherInformation;
+
+        try {
+          await this.setLoader(true);
+          await Promise.all([
+            this.calloneWeather(weather),
+            this.getCountry(this.getCountryInformation.id),
+          ]);
+          await this.$router.push("/weather");
+        } finally {
+          await this.setLoader(false);
+        }
+      }
     },
   },
 
@@ -121,9 +108,7 @@ export default {
         }
       });
       let temp = newVal.hourly.map((x) => x.temp);
-      let hour = newVal.hourly.map((x) => {
-        new Date(x.dt * 1000).getHours();
-      });
+      let hour = newVal.hourly.map((x) => new Date(x.dt * 1000).getHours());
       this.dataHourly = {
         temp,
         hour,
@@ -132,6 +117,9 @@ export default {
       this.dataDaily = newVal.daily;
     },
     getLanguage() {
+      this.fetchData();
+    },
+    getUnit() {
       this.fetchData();
     },
   },
@@ -153,7 +141,7 @@ export default {
   width: 100%;
 }
 .chart {
-  width: 470px;
+  max-width: 470px;
   overflow: hidden;
 }
 </style>

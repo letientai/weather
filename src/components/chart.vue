@@ -1,6 +1,6 @@
 <template>
   <!-- <div> -->
-  <div style="width: 2200px">
+  <div v-if="dataHourly.hour.length > 0" style="width: 2200px">
     <div class="title">
       {{ $t("titleChart") }}
     </div>
@@ -62,7 +62,7 @@ export default {
             seriesName: "temp",
             labels: {
               formatter: function (value) {
-                return value + "°C";
+                return value + "°";
               },
             },
           },

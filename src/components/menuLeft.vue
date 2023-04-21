@@ -1,11 +1,14 @@
 <template>
   <div class="wrapper-menu">
+    <div class="btn-close" @click="hideMenu"></div>
     <div class="menu">
-      <div class="title"><h1>OpenWeather</h1></div>
+      <div class="title d-flex">
+        <h1>OpenWeather</h1>
+      </div>
       <div class="content">
         <ul>
-          <li @click="moveToWeather">Weather</li>
-          <li>Guide</li>
+          <li @click="move('/')">Home</li>
+          <li @click="move('/weather')">Weather</li>
           <li>API</li>
           <li>Dashboard</li>
           <li>Marketplace</li>
@@ -21,20 +24,29 @@
 export default {
   name: "menu-left",
   methods: {
-    moveToWeather(){
-        this.$router.push('/weather')
+    move(path) {
+      this.$router.push(path);
+    },
+    hideMenu(){
+      this.$emit("hideMenu")
     }
-  }
+  },
 };
 </script>
 <style scoped>
 .wrapper-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 400px;
+  width: 100%;
   height: 100%;
   padding: 20px;
+  background-color: #7e7e7e;
+  color: #fff;
+  position: relative;
+}
+.btn-close{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
 }
 .menu {
   width: 100%;
@@ -51,7 +63,7 @@ li {
   padding: 10px 5px;
 }
 li:hover {
-  background-color: rgb(240, 240, 240);
+  background-color: #999999;
   cursor: pointer;
 }
 </style>
