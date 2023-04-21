@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="forecast">
+  <div v-if="listDataDaily.length > 0" class="forecast">
     <div class="title">{{ $t("titleDaily") }}</div>
     <div class="content">
       <ul v-if="!checkShowDetail">
@@ -20,7 +20,9 @@
                   '@2x.png)',
               }"
             ></div>
-            {{ Math.round(data.temp.max) }} / {{ Math.round(data.temp.min) }}°C
+            {{ Math.round(data.temp.max) }} / {{ Math.round(data.temp.min) }}°{{
+              unit.temp
+            }}
           </div>
           <div class="description col">{{ data.weather[0].description }}</div>
         </li>
@@ -39,22 +41,42 @@ import forecastDetail from "./forecastDetail.vue";
 
 export default {
   name: "forecaset-vue",
+
   components: {
     forecastDetail,
   },
+
   props: {
     listDataDaily: Array,
   },
+
   data() {
     return {
       dataDaily: {},
       checkShowDetail: false,
       indexDetail: 0,
+      unit: {
+        temp: "",
+        wind: "",
+      },
     };
   },
+
   computed: {
     ...mapGetters("language", ["getLanguage"]),
+    ...mapGetters("unit", ["getUnit"]),
   },
+
+  created() {
+    if (this.getUnit === "metric") {
+      this.unit.temp = "C";
+      this.unit.wind = "m/s";
+    } else {
+      this.unit.temp = "F";
+      this.unit.wind = "mph";
+    }
+  },
+
   methods: {
     getDate(value) {
       const date = new Date(value * 1000);
@@ -72,14 +94,24 @@ export default {
       this.indexDetail = index;
       this.checkShowDetail = true;
     },
-    
-    closeDetail(check){
+
+    closeDetail(check) {
       this.checkShowDetail = check;
-    }
+    },
   },
+
   watch: {
     listDataDaily() {
       this.dataDaily = this.listDataDaily[this.indexDetail];
+    },
+    getUnit(newVal) {
+      if (newVal === "metric") {
+        this.unit.temp = "C";
+        this.unit.wind = "m/s";
+      } else {
+        this.unit.temp = "F";
+        this.unit.wind = "mph";
+      }
     },
   },
 };

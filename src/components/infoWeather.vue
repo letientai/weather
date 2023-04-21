@@ -13,17 +13,22 @@
           alt=""
         />
       </div>
-      {{ Math.round(weatherInfo?.temp) }}°C
+      {{ Math.round(weatherInfo?.temp) }}&deg;{{ unit.temp }}
     </div>
     <div class="description">
       {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°C.
       {{ weatherInfo?.weather[0].description }}
     </div>
     <ul class="weather-items d-flex my-2">
-      <li>{{ weatherInfo?.wind_speed.toFixed(1) }}m/s SE</li>
+      <li>{{ weatherInfo?.wind_speed.toFixed(1) }}{{ unit.wind }} SE</li>
       <li>{{ weatherInfo?.pressure }}hPa</li>
       <li>{{ $t("humidity") }}: {{ weatherInfo?.humidity }}%</li>
-      <li>{{ $t("dewPoint") }}: {{ Math.round(weatherInfo?.dew_point) }}°C</li>
+      <li>
+        {{ $t("dewPoint") }}: {{ Math.round(weatherInfo?.dew_point) }}°{{
+          unit.temp
+        }}
+      </li>
+      <li>{{ $t("UV") }}: {{ weatherInfo?.uvi }}°{{ unit.temp }}</li>
       <li>{{ $t("visibility") }}: {{ weatherInfo?.visibility / 1000 }}km</li>
     </ul>
   </div>
@@ -40,23 +45,36 @@ export default {
       country: {},
       date: "",
       check: false,
+      unit: {
+        temp: "",
+        wind: "",
+      },
     };
   },
 
   created() {
     this.fetchData();
+    if (this.getUnit === "metric") {
+      this.unit.temp = "C";
+      this.unit.wind = "m/s";
+    } else {
+      this.unit.temp = "F";
+      this.unit.wind = "mph";
+    }
   },
 
   methods: {
     fetchData() {
-        this.weatherInfo = this.getWeatherInformation.current;
-        this.country = this.getCountryInformation;
-        this.date = this.getDate(this.getWeatherInformation.current.dt);
-        this.check = true;
+      this.weatherInfo = this.getWeatherInformation.current;
+      this.country = this.getCountryInformation;
+      this.date = this.getDate(this.getWeatherInformation?.current?.dt);
+      this.check = true;
     },
     getDate(value) {
       const date = new Date(value * 1000);
-      const dayOfWeek = date.toLocaleString(this.getLanguage, { weekday: "short" });
+      const dayOfWeek = date.toLocaleString(this.getLanguage, {
+        weekday: "short",
+      });
       const month = date.toLocaleString(this.getLanguage, { month: "short" });
       const dayOfMonth = date.getDate();
       const formattedDate = `${dayOfWeek} ${month} ${dayOfMonth}`;
@@ -69,6 +87,7 @@ export default {
       "getCountryInformation",
     ]),
     ...mapGetters("language", ["getLanguage"]),
+    ...mapGetters("unit", ["getUnit"]),
   },
 
   watch: {
@@ -79,6 +98,15 @@ export default {
     },
     getCountryInformation(newVal) {
       this.country = newVal;
+    },
+    getUnit(newVal) {
+      if (newVal === "metric") {
+        this.unit.temp = "C";
+        this.unit.wind = "m/s";
+      } else {
+        this.unit.temp = "F";
+        this.unit.wind = "mph";
+      }
     },
   },
 };

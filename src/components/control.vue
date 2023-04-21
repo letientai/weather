@@ -1,7 +1,7 @@
 <template>
   <div class="grey-container">
     <div class="section-content">
-      <div class="d-flex justify-content-between aline-item-center">
+      <div class="d-block d-md-flex justify-content-between aline-item-center">
         <div class="search-block d-flex my-4">
           <div class="form-input">
             <input
@@ -18,12 +18,15 @@
               @click="closeSuggest"
             >
               <div
-                v-show="listSuggest.length == 0 || v$.dataSearch.$error"
+                v-if="listSuggest.length == 0 || v$.dataSearch.$error"
                 style="font-size: 11px; padding: 10px 5px 0"
               >
                 {{ $t("errorSearch") }}
               </div>
-              <suggest-vue v-bind:listSuggest="listSuggest"></suggest-vue>
+              <suggest-vue
+                v-else
+                v-bind:listSuggest="listSuggest"
+              ></suggest-vue>
             </div>
           </div>
           <button class="btn-search" v-on:click="handleSearch">
@@ -42,8 +45,16 @@
             </select>
           </div>
           <div class="owm-switch d-flex">
-            <div class="option mx-2">Metric: °C, m/s</div>
-            <div class="option">Imperial: °F, mph</div>
+            <div class="option mx-2" @click="handleUnit('metric')">
+              <div class="text-option" :class="{ unit: option == 'metric' }">
+                Metric: °C, m/s
+              </div>
+            </div>
+            <div class="option" @click="handleUnit('imperial')">
+              <div class="text-option" :class="{ unit: option == 'imperial' }">
+                Imperial: °F, mph
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -70,11 +81,13 @@ export default {
       submit: false,
       listSuggest: [],
       dataSearch: "",
+      option: "",
     };
   },
   computed: {
     ...mapGetters("language", ["getLanguage"]),
     ...mapGetters("weather", ["getListCountry"]),
+    ...mapGetters("unit", ["getUnit"]),
   },
   validations() {
     return {
@@ -84,6 +97,7 @@ export default {
 
   created() {
     this.selected = this.getLanguage;
+    this.option = this.getUnit
   },
 
   mounted() {
@@ -99,6 +113,7 @@ export default {
   methods: {
     ...mapActions("language", ["setLanguage"]),
     ...mapActions("weather", ["findCountry"]),
+    ...mapActions("unit", ["setUnit"]),
 
     async handleSearch() {
       this.v$.$validate();
@@ -108,7 +123,6 @@ export default {
         this.listSuggest = [];
       }
 
-
       this.submit = true;
       if (this.submit) {
         document.addEventListener("click", this.handleClickOutside, true);
@@ -117,6 +131,10 @@ export default {
       }
     },
 
+    handleUnit(unit) {
+      this.option = unit;
+      this.setUnit(unit)
+    },
     //Sử lý close form suggest
     handleClickOutside(event) {
       if (!this.$refs.suggest.contains(event.target)) {
@@ -124,7 +142,7 @@ export default {
         document.removeEventListener("click", this.handleClickOutside, true);
       }
     },
-    
+
     closeSuggest() {
       this.submit = false;
     },
@@ -202,11 +220,17 @@ export default {
 }
 .option {
   background: #dfdfdf;
-  width: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 28px;
   cursor: pointer;
+  padding: 2px 4px;
+}
+.text-option {
+  padding: 2px 2px;
+}
+.unit {
+  background: rgb(255, 255, 255);
 }
 </style>

@@ -1,27 +1,28 @@
 <template>
   <div id="app">
-    <loader v-show="getLoader" />
-    <router-view></router-view>
+    <loader-vue v-show="getLoader" />
+    <component :is="layout">
+      <router-view></router-view>
+    </component>
   </div>
 </template>
 
 <script>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import { mapGetters } from "vuex";
-import loader from "./components/ultil/loader.vue";
+
 export default {
   name: "App",
-  components: {
-    loader,
-  },
-  data() {
+  setup() {
+    const route = useRoute();
     return {
-      loading: false
+      layout: computed(() => route.meta.layout),
     };
   },
   computed: {
     ...mapGetters("loader", ["getLoader"]),
   },
- 
 };
 </script>
 
