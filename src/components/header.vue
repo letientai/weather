@@ -1,8 +1,8 @@
 <template lang="">
   <div class="wrapper">
     <div class="section-content">
-      <div class="row">
-        <div class="col-lg-6 col-12">
+      <div class="">
+        <div class="col-lg-6 col-12 px-2">
           <h1>OpenWeather</h1>
           <h2>
             {{ $t("common.title") }}

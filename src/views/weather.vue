@@ -1,5 +1,5 @@
 <template lang="">
-  <div style="margin-top: -250px">
+  <div >
     <div class="header">
       <header-vue />
     </div>
@@ -141,7 +141,13 @@ export default {
   width: 100%;
 }
 .chart {
-  max-width: 470px;
+  max-width: 50vw;
   overflow: hidden;
+}
+@media screen and (max-width: 992px) {
+  .chart {
+    /* margin: auto; */
+    max-width: 90vw;
+  }
 }
 </style>

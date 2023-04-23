@@ -16,7 +16,7 @@
       {{ Math.round(weatherInfo?.temp) }}&deg;{{ unit.temp }}
     </div>
     <div class="description">
-      {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°C.
+      {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°{{ unit.temp }}.
       {{ weatherInfo?.weather[0].description }}
     </div>
     <ul class="weather-items d-flex my-2">

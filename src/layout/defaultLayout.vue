@@ -43,7 +43,7 @@ export default {
 }
 .menu {
   width: 20%;
-  position: absolute;
+  position: fixed;
   width: 330px;
   height: 100vh;
   z-index: 30;

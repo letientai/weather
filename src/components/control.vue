@@ -1,7 +1,7 @@
 <template>
   <div class="grey-container">
     <div class="section-content">
-      <div class="d-block d-md-flex justify-content-between aline-item-center">
+      <div class="d-block d-lg-flex justify-content-between aline-item-center">
         <div class="search-block d-flex my-4">
           <div class="form-input">
             <input
@@ -97,7 +97,7 @@ export default {
 
   created() {
     this.selected = this.getLanguage;
-    this.option = this.getUnit
+    this.option = this.getUnit;
   },
 
   mounted() {
@@ -133,7 +133,7 @@ export default {
 
     handleUnit(unit) {
       this.option = unit;
-      this.setUnit(unit)
+      this.setUnit(unit);
     },
     //Sử lý close form suggest
     handleClickOutside(event) {
@@ -154,6 +154,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .grey-container {
   background-color: #f2f2f2;
@@ -232,5 +233,27 @@ export default {
 }
 .unit {
   background: rgb(255, 255, 255);
+}
+@media screen and (max-width: 992px) {
+  .search-block {
+    width: 70%;
+    margin-left: 20%;
+    display: flex;
+  }
+  .form-input {
+    width: calc(100% - 90px);
+  }
+  .controls {
+    width: 70%;
+    margin-left: 20%;
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 435px) {
+  .controls {
+    width: 90%;
+    margin: auto;
+    justify-content: flex-end;
+  }
 }
 </style>
