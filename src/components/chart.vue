@@ -24,8 +24,6 @@ export default {
           monochrome: {
             enabled: true,
             color: "#75dbb4",
-            shadeTo: "light",
-            shadeIntensity: 0.65,
           },
         },
         xaxis: {
@@ -68,7 +66,6 @@ export default {
           },
           {
             opposite: true,
-            position: "bottom",
             seriesName: "rain",
             title: {
               text: "rain",

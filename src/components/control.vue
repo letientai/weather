@@ -107,7 +107,6 @@ export default {
   watch: {
     getListCountry(newVal) {
       this.listSuggest = newVal;
-      console.log(newVal);
     },
   },
   methods: {
@@ -158,6 +157,7 @@ export default {
 <style scoped>
 .grey-container {
   background-color: #f2f2f2;
+  font-size: 14px;
 }
 .search-block {
   width: 55%;
@@ -171,7 +171,6 @@ export default {
   background: #424242;
   color: white;
   padding: 5px 15px;
-  font-size: 14px;
   width: 90px;
 }
 .controls {
@@ -182,7 +181,6 @@ export default {
 }
 .selected-language {
   background-color: #acacac;
-  font-size: 14px;
   border: none;
   color: #fff;
   outline: none;
@@ -200,7 +198,6 @@ export default {
   padding-left: 10px;
   width: 100%;
   height: 100%;
-  font-size: 14px;
   margin-left: 1px;
 }
 .suggest {
@@ -229,7 +226,7 @@ export default {
   padding: 2px 4px;
 }
 .text-option {
-  padding: 2px 2px;
+  padding: 1px 2px;
 }
 .unit {
   background: rgb(255, 255, 255);
@@ -254,6 +251,11 @@ export default {
     width: 90%;
     margin: auto;
     justify-content: flex-end;
+  }
+  .search-block {
+    width: 90%;
+    margin-left: 5%;
+    display: flex;
   }
 }
 </style>

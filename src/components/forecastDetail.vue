@@ -15,8 +15,11 @@
         <div class="description">
           <div class="weather">{{ daily?.weather[0]?.description }}.</div>
           <div>
-            {{ $t("maxTemp") }}{{ Math.round(daily?.temp?.max) }}°{{ unit.temp }},
-            {{ $t("minTemp") }} {{ Math.round(daily?.temp?.min) }}°{{ unit.temp }}.
+            {{ $t("maxTemp") }}{{ Math.round(daily?.temp?.max) }}°{{
+              unit.temp
+            }}, {{ $t("minTemp") }} {{ Math.round(daily?.temp?.min) }}°{{
+              unit.temp
+            }}.
           </div>
         </div>
         <div class="close" @click="closeDetail">
@@ -29,7 +32,11 @@
         <li>{{ daily?.pressure }}hPa</li>
         <li>{{ $t("humidity") }}: {{ daily?.humidity }}%</li>
         <li>{{ $t("UV") }}:{{ Math.round(daily?.uvi) }}</li>
-        <li>{{ $t("dewPoint") }}: {{ Math.round(daily?.dew_point) }}°{{ unit.temp }}</li>
+        <li>
+          {{ $t("dewPoint") }}: {{ Math.round(daily?.dew_point) }}°{{
+            unit.temp
+          }}
+        </li>
       </ul>
 
       <div class="temp-detail my-3">
@@ -88,14 +95,17 @@ export default {
         temp: "",
         wind: "",
       },
+      country: {},
     };
   },
   computed: {
     ...mapGetters("unit", ["getUnit"]),
+    ...mapGetters("weather", ["getCountryInformation"]),
   },
   watch: {
     dataDaily(newVal) {
       this.daily = newVal;
+      this.country = this.getCountryInformation;
     },
     getUnit(newVal) {
       if (newVal === "metric") {
@@ -109,6 +119,7 @@ export default {
   },
 
   created() {
+    this.country = this.getCountryInformation;
     if (this.getUnit === "metric") {
       this.unit.temp = "C";
       this.unit.wind = "m/s";
@@ -123,13 +134,15 @@ export default {
       this.$emit("closeDetail", false);
     },
     getTime(value) {
-      const dateObj = new Date(value * 1000);
-      const hours = dateObj.getHours();
-      const minutes = dateObj.getMinutes();
-      const ampm = hours >= 12 ? "pm" : "am";
-      const formattedTime = `${hours % 12}:${minutes
-        .toString()
-        .padStart(2, "0")}${ampm}`;
+      const date = new Date(value * 1000); // Convert seconds to milliseconds
+      const timezoneOffset = date.getTimezoneOffset() * 60; // Convert offset to seconds
+      const gmtOffset = this.country.timezone;
+      const localTime = date.getTime() + (gmtOffset + timezoneOffset) * 1000; // Convert to local time
+      const formattedTime = new Date(localTime).toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
       return formattedTime;
     },
   },
