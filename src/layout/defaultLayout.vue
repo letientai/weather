@@ -81,7 +81,7 @@ export default {
   position: relative;
   display: block;
   height: 2px;
-  background-color: #9b9b9b;
+  background-color: #f3f3f3;
 }
 .content {
   width: 100%;

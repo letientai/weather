@@ -67,9 +67,6 @@ export default {
     getLanguage() {
       this.getWeather();
     },
-    listSuggest(newVal) {
-      console.log(newVal);
-    },
   },
 };
 </script>
@@ -82,10 +79,10 @@ export default {
   border-top: none;
   z-index: 100;
   margin: 0;
+  font-size: 14px;
 }
 ul {
   /* background: red; */
-  font-size: 14px;
   display: flex;
 }
 li {
@@ -114,5 +111,17 @@ li:hover {
 .location {
   color: #a0a0a0;
   font-size: 10px;
+}
+
+@media screen and (max-width: 520px) {
+  .search-dropdown-menu {
+    font-size: 11px;
+  }
+  .icon {
+    width: 25px;
+  }
+  li {
+    padding: 10px;
+  }
 }
 </style>

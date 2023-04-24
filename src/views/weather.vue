@@ -1,5 +1,5 @@
 <template lang="">
-  <div >
+  <div>
     <div class="header">
       <header-vue />
     </div>
@@ -21,7 +21,7 @@
         <div class="chart col-12 col-md-6">
           <lineChart v-bind:dataHourly="dataHourly" />
         </div>
-        <div class="forecast col-12 col-md ml-2">
+        <div class="forecast col-12 col-md-6 ml-2">
           <forecastVue v-bind:listDataDaily="dataDaily" />
         </div>
       </div>
@@ -141,10 +141,16 @@ export default {
   width: 100%;
 }
 .chart {
-  max-width: 50vw;
+  max-width: 470px;
   overflow: hidden;
 }
 @media screen and (max-width: 992px) {
+  .chart {
+    /* margin: auto; */
+    max-width: 50vw;
+  }
+}
+@media screen and (max-width: 768px) {
   .chart {
     /* margin: auto; */
     max-width: 90vw;

@@ -16,11 +16,27 @@
       {{ Math.round(weatherInfo?.temp) }}&deg;{{ unit.temp }}
     </div>
     <div class="description">
-      {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°{{ unit.temp }}.
+      {{ $t("feelsLike") }} {{ Math.round(weatherInfo?.feels_like) }}°{{
+        unit.temp
+      }}.
       {{ weatherInfo?.weather[0].description }}
     </div>
     <ul class="weather-items d-flex my-2">
-      <li>{{ weatherInfo?.wind_speed.toFixed(1) }}{{ unit.wind }} SE</li>
+      <li class="d-flex">
+        <div class="imgage">
+          <img
+            class="wind-line"
+            src="../assets/location-arrow-solid.svg"
+            alt=""
+            :style="`transform: rotate(${
+              135 + (weatherInfo?.wind_deg || 0)
+            }deg)`"
+          />
+        </div>
+        <div class="text mx-1">
+          {{ weatherInfo?.wind_speed.toFixed(1) }}{{ unit.wind }}
+        </div>
+      </li>
       <li>{{ weatherInfo?.pressure }}hPa</li>
       <li>{{ $t("humidity") }}: {{ weatherInfo?.humidity }}%</li>
       <li>
@@ -67,18 +83,36 @@ export default {
     fetchData() {
       this.weatherInfo = this.getWeatherInformation.current;
       this.country = this.getCountryInformation;
-      this.date = this.getDate(this.getWeatherInformation?.current?.dt);
+      this.date = this.getDate(this.getCountryInformation.dt);
       this.check = true;
     },
     getDate(value) {
-      const date = new Date(value * 1000);
-      const dayOfWeek = date.toLocaleString(this.getLanguage, {
-        weekday: "short",
-      });
-      const month = date.toLocaleString(this.getLanguage, { month: "short" });
-      const dayOfMonth = date.getDate();
-      const formattedDate = `${dayOfWeek} ${month} ${dayOfMonth}`;
-      return formattedDate;
+      // const date = new Date(value * 1000);
+      // const dayOfWeek = date.toLocaleString(this.getLanguage, {
+      //   weekday: "short",
+      // });
+      // const month = date.toLocaleString(this.getLanguage, { month: "short" });
+      // const dayOfMonth = date.getDate();
+      // const hour = date.getHours();
+      // const minutes = date.getMinutes()
+      // const formattedDate = `${dayOfWeek} ${month} ${dayOfMonth}, ${hour}: ${minutes}`;
+      // return formattedDate;
+
+      const date = new Date(value * 1000); // Convert seconds to milliseconds
+      const timezoneOffset = date.getTimezoneOffset() * 60; // Convert offset to seconds
+      const gmtOffset = this.country.timezone;
+      const localTime = date.getTime() + (gmtOffset + timezoneOffset) * 1000; // Convert to local time
+      const formattedTime = new Date(localTime).toLocaleString(
+        this.getLanguage,
+        {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: false,
+        }
+      );
+      return formattedTime;
     },
   },
   computed: {
@@ -88,6 +122,10 @@ export default {
     ]),
     ...mapGetters("language", ["getLanguage"]),
     ...mapGetters("unit", ["getUnit"]),
+
+    windDirection() {
+      return this.weatherInfo.wind_deg;
+    },
   },
 
   watch: {
@@ -143,5 +181,8 @@ li {
   list-style-type: none;
   margin: 0px 15px;
   font-size: 14px;
+}
+.imgage {
+  width: 12px;
 }
 </style>
